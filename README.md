@@ -124,9 +124,43 @@ The model saves to `model.bin` automatically when training completes.
 Type `/quit` to exit, `/temp 0.7` to change temperature, `/len 300` to change generation length, and `/sample` to generate from a blank context.
 
 
-## Generate Your Own Sample
+## Demo: Real Output From a Small CPU Run
 
-This repo does not ship a saved training log or sample output. After training finishes, generate text from the trained model yourself:
+The repo does not ship a log or output from the full 4080 training run. This section is a real run of the same code at a much smaller size, done on a CPU-only machine (the CUDA kernel calls were replaced by plain C++ loops with the same interface). It is **not** the full 10.7M-parameter model and not trained on the RTX 4080.
+
+Settings changed from the defaults: d_model 128, 4 layers, 4 heads, d_ff 512, context 64 (about 0.8M parameters), 1,500 optimizer steps (32 micro-batches each), peak learning rate 1e-3, warmup 50. Same tiny Shakespeare file, same character tokenizer (65 tokens). Training took 19 minutes.
+
+| Step | Smoothed loss | Perplexity |
+|---|---|---|
+| 0 | 4.2215 | 68.1 |
+| 500 | 2.0019 | 7.4 |
+| 1,000 | 1.7357 | 5.7 |
+| 1,450 | 1.6509 | 5.2 |
+
+Unedited output generated after training (seed: newline, temperature 0.8, about 500 characters):
+
+```
+I not done to make her boss, the throught. Why, fore and.
+
+PROMEO:
+Nown stail; both, that is me fortune be good atess
+Bame cling now-sweet and so some he stall,'
+And banised my abour med poson my you new grace
+Than I long do such on hearth it goods!
+Some, sir, the preshest's nurne agle good exemper?
+
+Second Duke: the king:
+Reguned with with my his the should her repleed
+Thou hath much misherd you calless were she day.
+
+HENRY OLINE:
+I seeet thou it; whose: which are woes,
+For thou art which it 
+```
+
+It picks up character names, line breaks and speaker-label formatting, but the words are mostly not real, which is expected at this size. The full-size model is meant to do better.
+
+To get a sample from your own trained model:
 
 ```
 .\build\chat.exe model.bin -t 0.8 -l 400
