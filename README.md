@@ -106,7 +106,7 @@ The project includes a `build.bat` that initializes the MSVC environment, adds C
 
 This produces `build\llm.exe` for training and `build\chat.exe` for inference.
 
-**Train the model.** Training runs 5,000 optimizer steps, each averaging gradients over 32 random 256-token sequences. On an RTX 3050 Laptop GPU this takes approximately 10 to 15 hours.
+**Train the model.** Training runs 5,000 optimizer steps, each averaging gradients over 32 random 256-token sequences. On an RTX 4080 Laptop GPU this takes approximately 10 to 15 hours.
 
 ```
 .\build\llm.exe
@@ -124,7 +124,20 @@ The model saves to `model.bin` automatically when training completes.
 Type `/quit` to exit, `/temp 0.7` to change temperature, `/len 300` to change generation length, and `/sample` to generate from a blank context.
 
 
+## Generate Your Own Sample
+
+This repo does not ship a saved training log or sample output. After training finishes, generate text from the trained model yourself:
+
+```
+.\build\chat.exe model.bin -t 0.8 -l 400
+```
+
+Inside the chat program, `/sample` generates from a blank context.
+
+
 ## Expected Training Progress
+
+The values below are approximate targets, not measured results from a saved run.
 
 | Step | Approximate Loss | Perplexity | What the Output Looks Like |
 |---|---|---|---|
@@ -177,3 +190,4 @@ Karpathy, *nanoGPT*, GitHub. The reference implementation that informed the mode
 
 ---
 *Mahdy*
+
